@@ -10,9 +10,6 @@ def replaceTab(sentence):
     return "".join(result)
 
 if __name__ == '__main__':
-    sentence = 'This	is		a			pen.'
-    expect = 'This is  a   pen.'
-    actual = replaceTab(sentence)
-    print(sentence)
-    print(actual)
-    assert expect == actual
+    with open('../hightemp.txt') as f:
+        sentence = f.read()
+        print(replaceTab(sentence), end='')
