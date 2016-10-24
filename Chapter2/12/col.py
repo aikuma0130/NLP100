@@ -1,5 +1,5 @@
 
-def col(sentence, row):
+def col(sentence, column):
     result = []
     for line in sentence.split('\n')[:-1]:
         l = []
@@ -7,7 +7,7 @@ def col(sentence, row):
             l.append(col)
         result.append(l)
 
-    return "\n".join([ line[row-1] for line in result ]) + "\n"
+    return "\n".join([ line[column-1] for line in result ]) + "\n"
 
 if __name__ == '__main__':
     with open('../hightemp.txt') as f:

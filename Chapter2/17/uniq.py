@@ -4,8 +4,8 @@ def uniq(filename):
         sentence = f.read()
 
     result = set()
-    for r in [ [ row for row in line.split('\t') ] for line in sentence.split('\n')[:-1] ]:
-        result.add(r[0])
+    for c in [ [ column for column in line.split('\t') ] for line in sentence.split('\n')[:-1] ]:
+        result.add(c[0])
 
     result = list(result)
     result.sort()
