@@ -1,11 +1,15 @@
 import re
 
 def extract_template(text):
-    basic_pattern = re.compile('{{基礎情報.*?\n(|.*?)\n}}', re.DOTALL)
-    field_pattern = re.compile('\|(.*?)\n\|', re.DOTALL)
+    basic_pattern = re.compile('{{基礎情報.*?\n\|(.*?)\n}}', re.DOTALL)
+    result = {}
     for i in basic_pattern.findall(text):
-        for j in field_pattern.findall(i):
-            print(j)
+        for j in i.split('\n|'):
+            key = j.split(' = ')[0].lstrip()
+            value = j.split(' = ')[1].rstrip()
+            if key not in result:
+                result[key] = value
+    return result
 
 if __name__ == '__main__':
     import sys
