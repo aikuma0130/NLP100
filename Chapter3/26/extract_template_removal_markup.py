@@ -15,9 +15,9 @@ def removal_markup(text):
     max_emphasis_pattern = re.compile("'''''([^']+?)'''''", re.DOTALL)
     mid_emphasis_pattern = re.compile("'''([^']+?)'''", re.DOTALL)
     emphasis_pattern = re.compile("''([^']+?)''", re.DOTALL)
-    text = max_emphasis_pattern.sub('\1', text)
-    text = mid_emphasis_pattern.sub('\1', text)
-    text = emphasis_pattern.sub('\1', text)
+    text = max_emphasis_pattern.sub('\g<1>', text)
+    text = mid_emphasis_pattern.sub('\g<1>', text)
+    text = emphasis_pattern.sub('\g<1>', text)
     return text
 
 if __name__ == '__main__':
