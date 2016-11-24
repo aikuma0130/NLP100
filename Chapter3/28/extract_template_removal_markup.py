@@ -8,7 +8,11 @@ def extract_template(text):
             key = j.split(' = ')[0].lstrip()
             value = j.split(' = ')[1].rstrip()
             if key not in result:
-                result[key] = removal_template(removal_internal_link(removal_emphasis(value)))
+                value = removal_emphasis(value)
+                value = removal_internal_link(value)
+                value = remove_ref(value)
+                value = removal_template(value)
+                result[key] = value
     return result
 
 def removal_emphasis(text):
@@ -23,17 +27,27 @@ def removal_emphasis(text):
 def removal_internal_link(text):
     internal_link_pattern = re.compile("\[\[([^\\]\\|]+?)\]\]", re.DOTALL)
     internal_link_with_string_pattern = re.compile("\[\[([^\\]\\|]+?)\|([^\\]]+?)\]\]", re.DOTALL)
+    internal_link_with_two_string_pattern = re.compile("\[\[([^\\]\\|]+?)\|([^\\]\\|]+?)\|([^\\]]+?)\]\]", re.DOTALL)
     text = internal_link_pattern.sub('\g<1>', text)
+    text = internal_link_with_two_string_pattern.sub('\g<3>', text)
     text = internal_link_with_string_pattern.sub('\g<2>', text)
     return text
 
 def removal_template(text):
     template_pattern = re.compile("{{([^}\\|]+?)}}", re.DOTALL)
-    template_with_string_pattern = re.compile("{{([^}\\|]+?)\|([^}]+?)}}", re.DOTALL)
+    template_with_two_string_pattern = re.compile("{{([^}\\|]+?)\|([^}\\|]+?)\|([^}]+?)}}", re.DOTALL)
+    template_with_string_pattern = re.compile("{{([^}\\|]+?)\|([^}\\|]+?)}}", re.DOTALL)
     text = template_pattern.sub('\g<1>', text)
+    text = template_with_two_string_pattern.sub('\g<3>', text)
     text = template_with_string_pattern.sub('\g<2>', text)
     return text
 
+def remove_ref(text):
+    ref_one_tag_pattern = re.compile("<ref[^<]*?/>", re.DOTALL)
+    ref_pattern = re.compile("<ref.*?>.*?</ref>", re.DOTALL)
+    text = ref_one_tag_pattern.sub('', text)
+    text = ref_pattern.sub('', text)
+    return text
 
 if __name__ == '__main__':
     import sys
@@ -41,4 +55,4 @@ if __name__ == '__main__':
     from extract_country import extract_country
     
     text = extract_country('../jawiki-country.json.gz', 'イギリス')
-    print(extract_template(text)['公式国名'])
+    print(extract_template(text))
