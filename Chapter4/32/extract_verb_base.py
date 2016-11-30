@@ -23,12 +23,18 @@ def read_mecab_file(filename):
 
     return result
 
+def extract_verb(morphemes, key='surface'):
+    result = []
+    for morpheme in morphemes:
+        if morpheme['pos'] == '動詞':
+            result.append(morpheme[key])
+
+    return result
+
 if __name__ == '__main__':
-    result = set()
-    mecab = read_mecab_file('../neko.txt')
-    for line in mecab:
-        for morpheme in line:
-            if morpheme['pos'] == '動詞':
-                result.add(morpheme['base'])
-    print(list(result))
+    lines = read_mecab_file('../neko.txt')
+    result = []
+    for morphemes in lines:
+        result += extract_verb(morphemes, 'base')
+    print(set(result))
 
