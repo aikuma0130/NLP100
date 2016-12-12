@@ -43,5 +43,7 @@ if __name__ == '__main__':
     for i, num in enumerate(word_count(lines)[:10]):
         height.append(num[1])
         left.append(i)
+        plt.text(i,0,num[0])
 
     plt.bar(np.array(left),np.array(height))
+    plt.show()
