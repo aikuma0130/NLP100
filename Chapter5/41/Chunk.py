@@ -19,8 +19,8 @@ class Chunk():
             chunks = []
             dependencies = {}
             for chunk in root:
-                src = chunk.attrib['id']
-                dst = chunk.attrib['link']
+                src = int(chunk.attrib['id'])
+                dst = int(chunk.attrib['link'])
                 dependencies[src] = dst
                 srcs = [ k for k, v in dependencies.items() if v == src ]
                 morphs = []
@@ -42,4 +42,4 @@ if __name__ == '__main__':
     chunks = [ chunk for chunk in sentences[7] ]
     for chunk in chunks:
         chunk_text = "".join([ morph.surface for morph in chunk.morphs ])
-        print(chunk_text + " : " + chunk.dst)
+        print(chunk_text + " : " + str(chunk.dst))
