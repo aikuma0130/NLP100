@@ -13,6 +13,7 @@ class Chunk():
         self.dst = dst
         self.srcs = srcs
         self.is_visit = False
+        self.cases = [ morph.surface for morph in morphs if morph.pos == '助詞' ]
 
     def has_pos(self, pos):
         for morph in self.morphs:
@@ -68,16 +69,11 @@ if __name__ == '__main__':
         for chunk in sentence:
             if not chunk.has_pos('動詞'):
                 continue
-            verbs = chunk.verbs
             cases = []
             frames = []
             for index in chunk.srcs:
+                cases.extend(sentence[index].cases)
                 if sentence[index].has_pos('助詞'):
                     frames.append(sentence[index].surfaces)
-                else:
-                    continue
-                for morph in sentence[index].morphs:
-                    if morph.pos == '助詞':
-                        cases.append(morph.surface)
             if len(frames) != 0:
-                print(verbs[0] + "\t" + " ".join(cases) + "\t" + " ".join(frames))
+                print(chunk.verbs[0] + "\t" + " ".join(cases) + "\t" + " ".join(frames))
