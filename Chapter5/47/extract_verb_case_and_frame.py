@@ -15,17 +15,11 @@ class Chunk():
     def __init__(self, morphs, dst, srcs):
         self.morphs = morphs
         self.surfaces = "".join([ morph.surface for morph in morphs if morph.surface not in ['、','。']])
-        self.verbs = [ morph.base for morph in morphs if morph.pos == '動詞']
         self.dst = dst
         self.srcs = srcs
         self.is_visit = False
         self.cases = [ morph.surface for morph in morphs if morph.pos == '助詞' ]
-
-    def get_surfaces(self):
-        return "".join([ morph.surface for morph in self.morphs if morph.surface not in ['、','。']])
-
-    def get_cases(self):
-        return [ morph.surface for morph in self.morphs if morph.pos == '助詞' ]
+        self.verbs = [ morph.base for morph in morphs if morph.pos == '動詞']
 
     def get_morph_index(self, pos, pos1):
         for index, morph in enumerate(self.morphs):
@@ -94,16 +88,15 @@ if __name__ == '__main__':
             cases = []
             frames = []
             verb = None
+            if len(chunk.srcs) == 0:
+                continue
             for index in chunk.srcs:
                 i = sentence[index].get_morph_index('名詞', 'サ変接続')
-                if i != -1:
-                    if len(sentence[index].morphs) != i + 1 :
-                        if sentence[index].morphs[i+1].surface == 'を':
-                            verb = sentence[index].morphs[i].surface + sentence[index].morphs[i+1].surface + chunk.verbs[0]
+                if i != -1 and len(sentence[index].morphs) != i+1 and sentence[index].morphs[i+1].surface == 'を':
+                    verb = sentence[index].morphs[i].surface + sentence[index].morphs[i+1].surface + chunk.verbs[0]
                 else:
-                    cases.extend(sentence[index].cases)
                     if sentence[index].has_pos('助詞'):
+                        cases.extend(sentence[index].cases)
                         frames.append(sentence[index].surfaces)
-                    continue
-                if verb != None:
-                    print(verb + "\t" + " ".join(cases) + "\t" + " ".join(frames))
+            if verb != None and len(frames) != 0:
+                print(verb + "\t" + " ".join(cases) + "\t" + " ".join(frames))
