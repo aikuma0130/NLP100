@@ -85,10 +85,11 @@ class Chunk():
     @staticmethod
     def extract_noun_path(sentence):
         for index, chunk in enumerate(sentence):
-            if not chunk.has_pos('名詞') and chunk.dst == -1:
+            if not chunk.has_pos('名詞'):
                 continue
             surfaces = Chunk.get_dst_surfaces(sentence, index)
-            print(" -> ".join(surfaces))
+            if len(surfaces) >= 2:
+                print(" -> ".join(surfaces))
 
 if __name__ == '__main__':
     
@@ -96,24 +97,6 @@ if __name__ == '__main__':
         cabocha_xml = f.read()
     sentences = Chunk.fromstring(cabocha_xml)
     #print([ chunk.surfaces for chunk in sentences[7]])
-    result = []
+    #Chunk.extract_noun_path(sentences[7])
     for sentence in sentences:
         Chunk.extract_noun_path(sentence)
-    #    for chunk in sentence:
-    #        if not chunk.has_pos('動詞'):
-    #            continue
-    #        cases = []
-    #        frames = []
-    #        verb = None
-    #        if len(chunk.srcs) == 0:
-    #            continue
-    #        for index in chunk.srcs:
-    #            i = sentence[index].get_morph_index('名詞', 'サ変接続')
-    #            if i != -1 and len(sentence[index].morphs) != i+1 and sentence[index].morphs[i+1].surface == 'を':
-    #                verb = sentence[index].morphs[i].surface + sentence[index].morphs[i+1].surface + chunk.verbs[0]
-    #            else:
-    #                if sentence[index].has_pos('助詞'):
-    #                    cases.extend(sentence[index].cases)
-    #                    frames.append(sentence[index].surfaces)
-    #        if verb != None and len(frames) != 0:
-    #            print(verb + "\t" + " ".join(cases) + "\t" + " ".join(frames))
