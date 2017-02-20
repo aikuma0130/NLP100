@@ -75,21 +75,23 @@ class Chunk():
         return result
 
     @staticmethod
-    def get_dst_surfaces(sentence, index):
-        surfaces = [ sentence[index].surfaces, ]
+    def get_chunks_until_root(sentence, index):
+        chunks = [ sentence[index], ]
         dst = sentence[index].dst
         if dst != -1:
-            surfaces.extend(Chunk.get_dst_surfaces(sentence, dst))
-        return surfaces
+            chunks.extend(Chunk.get_chunks_until_root(sentence, dst))
+        return chunks
 
     @staticmethod
     def extract_noun_path(sentence):
+        result = []
         for index, chunk in enumerate(sentence):
             if not chunk.has_pos('名詞'):
                 continue
-            surfaces = Chunk.get_dst_surfaces(sentence, index)
-            if len(surfaces) >= 2:
-                print(" -> ".join(surfaces))
+            chunks_until_root = Chunk.get_chunks_until_root(sentence, index)
+            if len(chunks_until_root) >= 2:
+                result.append(chunks_until_root)
+        return result
 
 if __name__ == '__main__':
     
@@ -99,4 +101,5 @@ if __name__ == '__main__':
     #print([ chunk.surfaces for chunk in sentences[7]])
     #Chunk.extract_noun_path(sentences[7])
     for sentence in sentences:
-        Chunk.extract_noun_path(sentence)
+        for noun_paths in Chunk.extract_noun_path(sentence):
+            print(" -> ".join([ chunk.surfaces for chunk in noun_paths]))
