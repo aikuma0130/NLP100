@@ -26,5 +26,6 @@ if __name__ == '__main__':
     for line in sentence.lines:
         json_data = parser.raw_parse(line)
         for word, info in json_data["sentences"][0]['words']:
-            print("{0}\t{1}\t{2}".format(word, info['Lemma'], info['PartOfSpeech']))
-
+            if info['NamedEntityTag'] == 'PERSON':
+                print(word)
+                #print("{0}\t{1}\t{2}".format(word, info['Lemma'], info['PartOfSpeech']))
