@@ -1,5 +1,6 @@
 import pymongo
 from pymongo import MongoClient
+import pprint
 
 def main():
     client = MongoClient('localhost', 27017)
@@ -9,7 +10,7 @@ def main():
     cur = collection.find({'name': 'Queen'})
 
     for col in cur:
-        print(col)
+        pprint.pprint(col)
 
 if __name__ == '__main__':
     main()
