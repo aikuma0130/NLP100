@@ -8,9 +8,9 @@ def index():
 
 @post('/')
 def hello():
-    name = request.POST.get('name', None)
-    alias = request.POST.get('alias', None)
-    tag = request.POST.get('tag', None)
+    name = request.POST.getunicode('name', None)
+    alias = request.POST.getunicode('alias', None)
+    tag = request.POST.getunicode('tag', None)
 
     db = artistdb.ArtistDB('localhost')
     artists = db.search(name=name, alias=alias, tag=tag)
