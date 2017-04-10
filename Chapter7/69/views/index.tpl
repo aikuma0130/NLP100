@@ -12,25 +12,19 @@
     <input type='submit' value="search"/>
   </form>
 {% if artists|length > 0 %}
-  <table>
+  <table border=1>
       <tr>
-          <td>rating</td>
-          <td>name</td>
-          <td>aliase</td>
-          <td>tag</td>
-          <td>area</td>
-          <td>begin</td>
-          <td>end</td>
+          <td>レーティング</td>
+          <td>名前</td>
+          <td>別名</td>
+          <td>タグ情報</td>
       </tr>
 {% for artist in artists %}
       <tr>
-          <td>artist.rating</td>
-          <td>artist.name</td>
-          <td>artist.aliase</td>
-          <td>artist.tag</td>
-          <td>artist.area</td>
-          <td>artist.begin</td>
-          <td>artist.end</td>
+          <td>{{ artist.rating_value }}</td>
+          <td>{{ artist.name }}</td>
+          <td>{{ artist.aliases_name |join(", ") }}</td>
+          <td>{{ artist.tags_value |join(", ") }}</td>
       </tr>
 {% endfor %}
   </table>
