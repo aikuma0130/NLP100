@@ -1,25 +1,55 @@
 from stemming.porter2 import stem
 import sys
 import re
-
-sys.path.append('../71')
-from stop_words import StopWord as sw
+import random
 
 
-class Sentiment():
+class NLP(object):
+    stop_words = []
+    with open('../stopwords.txt') as f:
+        for w in f:
+            stop_words.append(w.rstrip())
+
+    @classmethod
+    def is_stopword(self, word):
+        if word in self.stop_words:
+            return True
+        else:
+            return False
+
+
+class SentimentTestData():
+    def __init__(self, line, polarity):
+        self.line = line
+        self.polarity = polarity
+        self.feature = []
+        self._extract_feature()
+
+    def _extract_feature(self):
+        for word in re.split('\s\s*', self.line.strip()):
+            if not NLP.is_stopword(word):
+                self.feature.append(stem(word))
+
+
+class Sentiments(object):
     def __init__(self):
-        pass
+        self.data = []
 
-    @staticmethod
-    def extract_feature(sentence):
-        feature = []
-        for word in re.split('\s\s*', sentence.strip()):
-            if not sw.is_stopwords(word):
-                feature.append(stem(word))
-        return feature
+    def read_data(self, filename, polarity):
+        with open(filename, 'r') as f:
+            for data in f:
+                self.data.append(SentimentTestData(data, polarity))
+
+    def shuffle(self):
+        random.shuffle(self.data)
 
 if __name__ == '__main__':
-    with open('../sentiment.txt', 'r') as f:
-        for line in f.readlines():
-            print(Sentiment.extract_feature(line[3:]))
+    sentiments = Sentiments()
+    sentiments.read_data('../rt-polaritydata/rt-polarity-utf8.pos', 1)
+    sentiments.read_data('../rt-polaritydata/rt-polarity-utf8.neg', -1)
+    sentiments.shuffle()
+
+    print(sentiments.data[0].line)
+    print(sentiments.data[0].polarity)
+    print(sentiments.data[0].feature)
 
