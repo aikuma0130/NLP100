@@ -12,16 +12,19 @@ def main():
     sorted_word_count = sorted(word_count.items(), key=lambda x: x[1], reverse=True)
 
     percent = 0.05
-    end = int(len(sorted_word_count) * percent)
-    word_sum = sum([ word_count[1] for word_count in sorted_word_count ])
+    all_words_count_sum = sum([ word_count[1] for word_count in sorted_word_count ])
+    lower_limit = int(all_words_count_sum * percent)
+    upper_limit = all_words_count_sum - lower_limit
+
     stop_words = []
     sorted_word_count.reverse()
     for index, word_count in enumerate(sorted_word_count):
         #if index == 2000:
         #    break
-        if word_count[1] == 1 or word_count[1] >= 500:
+        if word_count[1] <= lower_limit or word_count[1] >= upper_limit:
+            stop_words.append(word_count[0])
+        else:
             continue
-        stop_words.append(word_count[0])
         #per = word_count[1] * 100 / word_sum
         #print(word_count[0] + ": " + str(per) + "%, " + str(word_count[1]))
 

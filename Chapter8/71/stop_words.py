@@ -19,6 +19,8 @@ class TestStopWord(unittest.TestCase):
 
     def test_is_stopword(self):
         self.assertTrue(StopWord.is_stopwords('the'))
+        self.assertTrue(StopWord.is_stopwords('you'))
+        self.assertTrue(StopWord.is_stopwords(','))
         self.assertFalse(StopWord.is_stopwords('hoge'))
 
 
